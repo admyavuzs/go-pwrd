@@ -66,6 +66,14 @@ resources:
     cpu: 100m
     memory: 256Mi
 
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  #targetCPUUtilizationPercentage: 80
+  averageRequest: 10
+  # targetMemoryUtilizationPercentage: 80
+
 nodeSelector: {}
 
 tolerations: []
