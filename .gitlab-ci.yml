@@ -1,16 +1,7 @@
 deploy:
- image: 'gc:v1t'
- stage: deploy
- variables:
- DOCKER_IMAGE_TAG: 'admyavuzs/go:v1'
- script:
- # Authenticate with GKE
- — gcloud config set project disco-outpost-286710
- — gcloud config set container/cluster poweredit-gke
- — gcloud config set compute/zone europe-north1-a
- — gcloud container clusters get-credentials poweredit-gke --zone europe-north1-a
-# Do the deployment
- — helm upgrade --install -n gitlab hello-go helm/
-only:
- — master
+  stage: deploy
+  image: alpine/helm:latest
+  script:
+    - helm init --client-only
+    - helm --namespace $NAMESPACE upgrade -i $REPO_NAME --set image.tag=$TAG,env=$ENV,image.repository=$REPO_REGISTRY_URL helm/
 
