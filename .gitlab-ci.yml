@@ -1,0 +1,20 @@
+deploy:
+ image: 'gc:v1t'
+ stage: deploy
+ variables:
+ DOCKER_IMAGE_TAG: 'odmyavuzs/go:v1'
+ script:
+ # Authenticate with GKE
+ — echo "$SERVICE_ACCOUNT_KEY" > key.json
+ — gcloud auth activate-service-account --key-file=key.json
+ — gcloud config set project disco-outpost-286710
+ — gcloud config set container/cluster poweredit-gke
+ — gcloud config set compute/zone europe-north1-a
+ — gcloud container clusters get-credentials poweredit-gke --zone europe-north1-a
+# Do the deployment
+ — cat kubernetes/my-application-deployment.yaml | envsubst | kubectl apply -f -
+environment:
+ name: test
+only:
+ — master
+
